@@ -1,7 +1,15 @@
 <script lang="ts">
   import { idleDetectionStore as store } from "$lib";
 
-  const { state, userState, screenState, requestPermission, start, stop } = store;
+  const {
+    state,
+    userState,
+    screenState,
+    requestPermission,
+    requestPermissionAndStart,
+    start,
+    stop
+  } = store;
 </script>
 
 <h1>Welcome to SvelteKit</h1>
@@ -15,14 +23,7 @@
 
 {#if $state === "init"}
   <button on:click={requestPermission}>Check permission</button>
-  <button
-    on:click={() =>
-      requestPermission().then((res) => {
-        if (res === "granted") {
-          start();
-        }
-      })}>Check permission & start</button
-  >
+  <button on:click={() => requestPermissionAndStart()}>Check permission & start</button>
 {/if}
 
 {#if $state === "not-permitted"}

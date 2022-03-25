@@ -4,10 +4,9 @@ import {
   isIdleDetectionSupported,
   requestIdleDetectionPermission,
   subscribeToIdleDetection,
-  unsubscribeFromIdleDetection,
-  type SubscribeToIdleDetectionParams
+  unsubscribeFromIdleDetection
 } from "./model";
-import type { IdleDetectionSubscriptionState } from "./types";
+import type { IdleDetectionSubscriptionState, SubscribeToIdleDetectionParams } from "./types";
 
 /** Mutable store w/ all data. */
 const store = {
@@ -18,6 +17,50 @@ const store = {
   screenState: writable<IdleDetector["screenState"]>(null)
 };
 
+/** Helper that starts listening. */
+async function start(params?: Pick<SubscribeToIdleDetectionParams, "threshold">) {
+  return subscribeToIdleDetection({
+    ...params,
+    onStateChange: store.state.set,
+    onEventChange: (next) => {
+      store.userState.set(next.userState);
+      store.screenState.set(next.screenState);
+    }
+  });
+}
+
+/** Helper that stops listening. */
+function stop() {
+  try {
+    unsubscribeFromIdleDetection();
+  } finally {
+    store.state.set("stopped");
+    store.userState.set(null);
+    store.screenState.set(null);
+  }
+}
+
+/** Helper to ask user for permission, if possible. */
+async function requestPermission() {
+  const res = await requestIdleDetectionPermission();
+  store.state.set(res === "granted" ? "ready" : "not-permitted");
+  return res;
+}
+
+/** Helper to ask for permission & start if possible. */
+async function requestPermissionAndStart(
+  params?: Pick<SubscribeToIdleDetectionParams, "threshold">
+) {
+  const res = await requestIdleDetectionPermission();
+  store.state.set(res === "granted" ? "ready" : "not-permitted");
+
+  if (res === "granted") {
+    await start(params);
+  }
+
+  return res;
+}
+
 /**
  * Readable store w/ idle detection values
  *  & handlers to manage subscription.
@@ -27,27 +70,8 @@ export const idleDetectionStore = {
   userState: derived(store.userState, ($s) => $s),
   screenState: derived(store.screenState, ($s) => $s),
 
-  requestPermission: async () => {
-    const res = await requestIdleDetectionPermission();
-    store.state.set(res === "granted" ? "ready" : "not-permitted");
-    return res;
-  },
-  start: (params?: Pick<SubscribeToIdleDetectionParams, "threshold">) =>
-    subscribeToIdleDetection({
-      ...params,
-      onStateChange: store.state.set,
-      onEventChange: (next) => {
-        store.userState.set(next.userState);
-        store.screenState.set(next.screenState);
-      }
-    }),
-  stop: () => {
-    try {
-      unsubscribeFromIdleDetection();
-    } finally {
-      store.state.set("stopped");
-      store.userState.set(null);
-      store.screenState.set(null);
-    }
-  }
+  requestPermission,
+  requestPermissionAndStart,
+  start,
+  stop
 };
