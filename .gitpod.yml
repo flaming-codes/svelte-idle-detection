@@ -1,0 +1,6 @@
+vscode:
+  extensions:
+    - heybourn.headwind
+    - esbenp.prettier-vscode
+    - svelte.svelte-vscode
+    - bradlc.vscode-tailwindcss
