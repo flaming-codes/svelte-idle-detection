@@ -1,5 +1,6 @@
 <script lang="ts">
   import { idleDetectionStore as store } from "$lib";
+  import { onDestroy } from "svelte";
 
   const {
     state,
@@ -10,6 +11,8 @@
     start,
     stop
   } = store;
+
+  onDestroy(stop);
 </script>
 
 <h1>Welcome to SvelteKit</h1>

@@ -15,7 +15,7 @@ const store = {
   ),
   userState: writable<IdleDetector["userState"]>(null),
   screenState: writable<IdleDetector["screenState"]>(null)
-};
+} as const;
 
 /** Helper that starts listening. */
 async function start(params?: Pick<SubscribeToIdleDetectionParams, "threshold">) {
@@ -74,4 +74,4 @@ export const idleDetectionStore = {
   requestPermissionAndStart,
   start,
   stop
-};
+} as const;
