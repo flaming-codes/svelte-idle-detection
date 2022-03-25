@@ -86,7 +86,7 @@ state: {$state}
 
 ## API
 
-                                                                                                                                                                    |
+Please see the [types](https://github.com/flaming-codes/svelte-idle-detection/blob/main/pkg/src/lib/types.ts) for an API-documentation.
 
 ## Svelte Development Help
 
