@@ -13,7 +13,6 @@ export async function requestIdleDetectionPermission() {
 }
 
 export function isIdleDetectionSupported() {
-  if (browser) console.log('"IdleDetector" in window', "IdleDetector" in window);
   return browser && "IdleDetector" in window;
 }
 
@@ -24,7 +23,7 @@ export type SubscribeToIdleDetectionParams = {
 };
 
 export async function subscribeToIdleDetection(params: SubscribeToIdleDetectionParams) {
-  const { threshold = 30_000, onStateChange, onEventChange } = params;
+  const { threshold = 60_000, onStateChange, onEventChange } = params;
 
   if (!isIdleDetectionSupported) {
     return;
@@ -41,7 +40,6 @@ export async function subscribeToIdleDetection(params: SubscribeToIdleDetectionP
 
   if ((await IdleDetector.requestPermission()) !== "granted") {
     onStateChange("not-permitted");
-    console.error("Idle detection permission denied.");
     return;
   }
 
@@ -52,8 +50,6 @@ export async function subscribeToIdleDetection(params: SubscribeToIdleDetectionP
         userState: idleDetector.userState,
         screenState: idleDetector.screenState
       });
-
-      console.log(`Idle change: ${idleDetector.userState}, ${idleDetector.screenState}.`);
     });
 
     await idleDetector.start({
@@ -62,12 +58,9 @@ export async function subscribeToIdleDetection(params: SubscribeToIdleDetectionP
     });
 
     onStateChange("started");
-
-    console.log("IdleDetector is active.");
   } catch (err) {
     signal = null;
     onStateChange("stopped");
-    console.error(err.name, err.message);
   }
 }
 

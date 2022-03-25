@@ -30,6 +30,7 @@ export const idleDetectionStore = {
   requestPermission: async () => {
     const res = await requestIdleDetectionPermission();
     store.state.set(res === "granted" ? "ready" : "not-permitted");
+    return res;
   },
   start: (params?: Pick<SubscribeToIdleDetectionParams, "threshold">) =>
     subscribeToIdleDetection({
@@ -45,6 +46,8 @@ export const idleDetectionStore = {
       unsubscribeFromIdleDetection();
     } finally {
       store.state.set("stopped");
+      store.userState.set(null);
+      store.screenState.set(null);
     }
   }
 };

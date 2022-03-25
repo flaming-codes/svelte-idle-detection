@@ -1,3 +1,17 @@
+tasks:
+  - init: cd app && npm install
+    command: |
+      export HMR_HOST=`gp url 3000`
+      npm run dev
+
+# If you also want to open the preview whenever
+# port 3000 gets opened (i.e. you run 'npm run dev'),
+# uncomment the next 3 lines.
+
+#ports:
+#  - port: 3000
+#    onOpen: open-preview
+
 vscode:
   extensions:
     - heybourn.headwind
