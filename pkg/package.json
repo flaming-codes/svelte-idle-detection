@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "svelte-idle-detection",
   "description": "A store implementation for Svelte to use the Idle Detection API for PWAs",
   "svelte": "index.js",
@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "package": "npm run copy:files && svelte-kit package",
+    "package": "npm run copy:files && npx svelte-package",
     "preview": "svelte-kit preview",
     "test": "playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
@@ -35,6 +35,7 @@
     "@playwright/test": "^1.20.0",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
+    "@sveltejs/package": "^1.0.0-next.6",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "copyfiles": "^2.4.1",

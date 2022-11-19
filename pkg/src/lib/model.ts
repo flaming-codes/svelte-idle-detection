@@ -1,4 +1,4 @@
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import type { IdleDetectionSubscriptionState, SubscribeToIdleDetectionParams } from "./types";
 
 /** AbortController reference for reuse. */
@@ -7,7 +7,7 @@ let controller: AbortController;
 let signal: AbortSignal;
 
 /**
- * Simple utiltiy that requests for permission to
+ * Simple utility that requests for permission to
  * access the API, if supported.
  *
  * @returns Result of 'requestPermission'-call.
